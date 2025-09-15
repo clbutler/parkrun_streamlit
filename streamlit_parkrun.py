@@ -9,6 +9,7 @@ Created on Sat Sep 13 11:23:17 2025
 #load our packages
 import streamlit as st
 import pandas as pd
+import seaborn as sns
 
 #create our header 
 st.write("ParkRun Data Exploration App")
@@ -61,8 +62,16 @@ if uploaded_file:
 
     
     parkrun_df_view = parkrun_df.drop('time_delta',axis = 1)
-    st.write(parkrun_df_view)
+    st.write(parkrun_df)
    
+    #add the boxplot
+    boxplot = parkrun_df.copy()
+    boxplot['time_in_minutes'] = boxplot['time_delta'].dt.total_seconds() / 60
+    boxplot = sns.boxplot(data = boxplot['time_in_minutes'], orient = 'h', width = .2)
+    boxplot.set_xlabel('Time in Minutes')
+    boxplot.set_title('Run Time Distribution')
+    st.pyplot(boxplot.get_figure())
+    
 
 
 
