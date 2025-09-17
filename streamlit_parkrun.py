@@ -10,6 +10,7 @@ Created on Sat Sep 13 11:23:17 2025
 import streamlit as st
 import pandas as pd
 import seaborn as sns
+import altair as alt
 
 #create our header 
 st.write("ParkRun Data Exploration App")
@@ -23,7 +24,7 @@ if uploaded_file:
     parkrun_df.columns = parkrun_df.columns.str.strip().str.capitalize()
 
     
-    #set up slider for run location 
+    #set up multiselect for run location 
     with st.sidebar:
         locations = parkrun_df['Event'].unique()
         locations_selected = st.multiselect('Select the parkrun locations you are interested in (optional)', locations)
@@ -62,7 +63,24 @@ if uploaded_file:
 
     
     parkrun_df_view = parkrun_df.drop('time_delta',axis = 1)
-    st.write(parkrun_df)
+    st.write(parkrun_df_view)
+    
+    #add a line plot 
+    lineplot = parkrun_df.copy()
+    lineplot['Run date'] = pd.to_datetime(lineplot['Run date'], format = '%d/%m/%Y')
+    lineplot['time_in_minutes'] = lineplot['time_delta'].dt.total_seconds() / 60
+    #lineplot = lineplot.set_index('Run date')
+
+    
+    # Create the Altair chart
+    lplot = alt.Chart(lineplot).mark_line().encode(
+        x = alt.X('Run date', axis = alt.Axis(title = 'Run Date')),
+        y = alt.Y('time_in_minutes', title = 'Run Time (Minutes)', scale = alt.Scale(zero = False))).properties(title = 'Your Parkruns over Time')
+    
+    st.altair_chart(lplot)
+        
+    
+    
    
     #add the boxplot
     boxplot = parkrun_df.copy()
