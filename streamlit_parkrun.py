@@ -9,8 +9,8 @@ Created on Sat Sep 13 11:23:17 2025
 #load our packages
 import streamlit as st
 import pandas as pd
-import seaborn as sns
 import altair as alt
+import json
 
 #create our header 
 st.write("ParkRun Data Exploration App")
@@ -69,13 +69,11 @@ if uploaded_file:
     lineplot = parkrun_df.copy()
     lineplot['Run date'] = pd.to_datetime(lineplot['Run date'], format = '%d/%m/%Y')
     lineplot['time_in_minutes'] = lineplot['time_delta'].dt.total_seconds() / 60
-    #lineplot = lineplot.set_index('Run date')
 
-    
     # Create the Altair chart
     lplot = alt.Chart(lineplot).mark_line().encode(
         x = alt.X('Run date', axis = alt.Axis(title = 'Run Date')),
-        y = alt.Y('time_in_minutes', title = 'Run Time (Minutes)', scale = alt.Scale(zero = False))).properties(title = 'Your Parkruns over Time')
+        y = alt.Y('time_in_minutes', title = 'Run Time (Minutes)', scale = alt.Scale(zero = False))).properties(title = 'Your Parkruns Over Time')
     
     st.altair_chart(lplot)
         
@@ -85,14 +83,32 @@ if uploaded_file:
     #add the boxplot
     boxplot = parkrun_df.copy()
     boxplot['time_in_minutes'] = boxplot['time_delta'].dt.total_seconds() / 60
-    boxplot = sns.boxplot(data = boxplot['time_in_minutes'], orient = 'h', width = .2)
-    boxplot.set_xlabel('Time in Minutes')
-    boxplot.set_title('Run Time Distribution')
-    st.pyplot(boxplot.get_figure())
+    bplot = alt.Chart(boxplot).mark_boxplot(extent = "min-max").encode(
+        x = alt.X('time_in_minutes', axis = alt.Axis(title = 'Time (minutes)'), scale = alt.Scale(zero = False)),
+    y = alt.Y('category:N', axis = None)).properties(title = 'Your Parkrun Performance')
+
     
-
-
-
+    st.altair_chart(bplot)
+    
+    #add the number of unique events card
+    unique_location = len(parkrun_df['Event'].unique())
+    
+    
+    #add your favourite event card
+    fav_runs = parkrun_df.groupby('Event').count().reset_index()
+    fav_runs = fav_runs[['Event', 'Run date']].sort_values('Run date', ascending = False)
+    fav_runs = fav_runs.iloc[0,0]
+    
+    col1, col2, = st.columns(2)
+    col1.metric("Number of Parkrun Locations", unique_location, border = True)
+    col2.metric("Most Visited Parkrun Location", fav_runs, border = True)
+    
+    
+    #add the map
+    from parkrun_functions import json_mapping
+    locations = json_mapping('parkrun_locations.json')
+    locations = pd.merge(left = parkrun_df, right = locations, how = 'left', left_on= 'Event', right_on = 'EventShortName')
+    st.map(locations, size = 20)
 # =============================================================================
 
 # =============================================================================
