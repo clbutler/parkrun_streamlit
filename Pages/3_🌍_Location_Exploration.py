@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Sep 21 22:07:33 2025
+
+@author: chrisbutler
+"""
+
+#load our packages
+import streamlit as st
+import pandas as pd
+import altair as alt
+
+#add the number of unique events card
+unique_location = len(unfiltered_parkruns['Event'].unique())
+
+
+#add your favourite event card
+fav_runs = unfiltered_parkruns.groupby('Event').count().reset_index()
+fav_runs = fav_runs[['Event', 'Run date']].sort_values('Run date', ascending = False)
+fav_runs = fav_runs.iloc[0,0]
+
+col1, col2, = st.columns(2)
+col1.metric("Number of Parkrun Locations", unique_location, border = True)
+col2.metric("Most Visited Parkrun Location", fav_runs, border = True)
+
+
+#add the map
+from parkrun_functions import json_mapping
+locations = json_mapping('parkrun_locations.json')
+locations = pd.merge(left = parkrun_df, right = locations, how = 'left', left_on= 'Event', right_on = 'EventShortName')
+st.map(locations, size = 20)
