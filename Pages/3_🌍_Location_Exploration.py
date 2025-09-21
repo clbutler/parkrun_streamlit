@@ -9,7 +9,10 @@ Created on Sun Sep 21 22:07:33 2025
 #load our packages
 import streamlit as st
 import pandas as pd
-import altair as alt
+
+
+unfiltered_parkruns = st.session_state['unfiltered_parkruns']
+parkrun_df = st.session_state['parkrun_df']    
 
 #add the number of unique events card
 unique_location = len(unfiltered_parkruns['Event'].unique())

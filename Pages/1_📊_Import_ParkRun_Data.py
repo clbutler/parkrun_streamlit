@@ -23,6 +23,7 @@ if uploaded_file:
     parkrun_df.columns = parkrun_df.columns.str.strip().str.capitalize()
     
     unfiltered_parkruns = parkrun_df.copy()
+    st.session_state['unfiltered_parkruns'] = unfiltered_parkruns
 
     
     #set up multiselect for run location 
@@ -34,6 +35,7 @@ if uploaded_file:
     
             
     parkrun_df['time_delta'] = pd.to_timedelta('00:' + parkrun_df['Time'])
+    st.session_state['parkrun_df'] = parkrun_df
     
     
     #card creation 
