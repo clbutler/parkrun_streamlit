@@ -14,46 +14,46 @@ st.set_page_config(
     page_icon="👋",
 )
 
-st.write("# Wecome to your ParkRun App 👋")
+st.write("# Wecome to your ParkRun App")
 
 st.sidebar.success("Start With Importing Your ParkRun Data")
 
+st.write('This application was  created with **Streamlit** by Dr. Chris Butler')
+
+col1, col2, col3 = st.columns([1, 6, 1])
+
+with col2:
+    st.image('parkrun_logo.png', caption = 'Your Parkrun journey starts here!')
+
+
+
+
 st.markdown(
     """
-This ParkRun application provides a comprehensive analysis of your personal ParkRun journey, offering insights into your performance over time and across different locations.
-
-The application is organized into two main pages, each designed to give you a detailed view of your ParkRun statistics:
-
-Instructions for Use
 
 
-Getting started with your ParkRun App is straightforward! Just follow these steps to set up and visualize your data:
-
-1. Download the Files
-
-
-First, download the following file from this GitHub page:
     
+    This app provides a comprehensive analysis of your personal Parkrun journey. It offers insights into your performance over time and across different locations.
 
-parkrun.csv
+    The app is organised into two main pages: **📈 Run Time Exploration** and **🌍 Location Exploration**. Each page is designed to give you a detailed view of your Parkrun statistics.
 
+    ### Instructions for Use
 
-2. The parkrun.csv file is where your personal ParkRun results live. Since ParkRun doesn't offer API connectivity or allow web scraping, you'll need to manually update this file with your own data:
+    Getting started is straightforward. Just follow these steps to set up and visualise your data:
 
-Log in to your ParkRun account.
+    1.  **Download the File**: First, download the `parkrun.csv` file from the provided GitHub page.
 
-
-Navigate to the "Results" tab.
-
-
-Click on "View stats for all parkruns by this parkrunner".
-
-
-Copy and paste the entire table (currently titled "All Results") directly into your parkrun.csv file.
-
-
-The app was created using Streamlit and all code was written by Christopher L Butler
-"""
+    2.  **Update Your Data**: Your personal results are stored in the `parkrun.csv` file. Since Parkrun doesn't allow API access, you'll need to update this file manually:
+        * Log in to your Parkrun account.
+        * Go to the **'Results'** tab.
+        * Click on **'View stats for all parkruns by this parkrunner'**.
+        * **Copy and paste** the entire **'All Results'** table directly into your `parkrun.csv` file.
+        
+    
+    
+        
+    3.  **Import**: Finally, import your updated `parkrun.csv` file into the app using the **📊 Import ParkRun Data** tab.
+    """
 )
 
 

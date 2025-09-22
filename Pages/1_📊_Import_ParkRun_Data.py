@@ -12,10 +12,14 @@ import pandas as pd
 
 
 #create our header 
-st.write("ParkRun Data Exploration App")
+st.title("📊 Import ParkRun Data")
+
 
 #create our upload box 
 uploaded_file = st.file_uploader(label = 'Upload your ParkRun data as a csv file here', type = 'csv')
+
+#st.write('Please ensure your file has the following structure or else it will not be able to read correctly')
+#st.image('example_csv.png', width = 500)
 
 #Visualise the dataframe
 if uploaded_file:
